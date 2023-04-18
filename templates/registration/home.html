@@ -1,0 +1,104 @@
+{% extends 'registration/base.html' %}
+
+{% block title %}{% block title-meta %}
+ لیست مقالات  
+{% endblock %} {% endblock %}
+
+{% block main %}
+
+      <div class="row">
+           <div class="col-12">
+            {% if object_list %}
+               <div class="card">
+                
+            </div>
+          </div?>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive p-0">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>عنوان</th>
+                <th>نویسنده</th>
+                <th>دسته بندی</th>
+                <th>تصویر</th>
+                <th>متن</th>
+                <th>زمان انتشار</th>
+                <th> کاربر ویژه </th>
+                <th>وضعیت مقاله</th>
+                <th>تگ ها </th>
+              </tr>
+            </thead>
+            <tbody>
+
+                {% for articel in object_list %}
+                <tr>
+                    <td>
+                      {% if articel.status in 'bd'|make_list or user.is_superuser %}
+                          <a href="{% url 'account:articel-update' articel.pk %}">
+                          {{articel.title}}</a></td>
+                      {% else %}
+                          {{articel.title}}
+                      {% endif %}
+
+                          <td>{{articel.author}}</td> 
+                          <td>{{articel.category_to_str}}</td> 
+                          <td><img src="{{articel.thumbnail.url}}" width="120px"></td> 
+                          <td>{{articel.description|striptags|truncatewords:'15'}}</td> 
+                          <td>{{articel.jpublish}}</td>
+                          
+                          <td>
+                            {% if atricel.is_special %}
+                              <i class="fa fa-check-circel" style="color: green;" ></i>
+                            {% else %}
+                              <i class="fa fa-minus-circel" style="color: red;" ></i>
+                            {% endif %}
+                          </td>
+
+                          <td>
+                      {% if articel.status == "p" %}
+                          <span class="badge badge-success">منتشر شده </span>
+                          <a target="_blank" class="badge badge-primary" href="{% url 'blog:detail' articel.slug %}"> نمایش مقاله</a>
+
+                          {% elif articel.status == "d" %}
+                          <span class="badge badge-danger">پیش نویس</span>
+                          <a target="_blank" class="badge badge-secondary" href="{% url 'blog:preview' articel.pk %}">پیش نمایش</a>
+
+                      {% elif articel.status == "i" %}
+                          <span class="badge" style="background-color: #9bedff;">در حال برسی </span>
+  
+                      {% if user.is_superuser %}
+                          <a target="_blank" class="badge badge-secondary" href="{% url 'blog:preview' articel.pk %}">پیش نمایش</a>
+                          {% endif %}
+
+                      
+                      {% else %}
+                          <span class="badge badge-warning"> برگشت داده شده </span>
+                          <a target="_blank" class="badge badge-secondary" href="{% url 'blog:preview' articel.pk %}">پیش نمایش</a>
+                      {% endif %}
+
+                      {% if user.is_superuser %}
+
+                      <a class="badge text-danger" href="{% url 'account:articel-delete' articel.pk %}"> حذف </a>
+
+                      {% endif %}
+                          </td> 
+                          <td>{{articel.tags}}</td> 
+                          </tr>
+                      {% endfor %}
+
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                  <!-- /.card -->
+              {% else %}      
+                  <h3>محتوایی برای نمایش وجود ندارد!</h3>
+        {% endif %}
+
+    </div>
+ </div>
+
+{% endblock %}

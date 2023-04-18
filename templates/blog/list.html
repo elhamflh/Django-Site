@@ -1,0 +1,87 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block main %}
+{% load ratings %}
+{% load base_tags %}
+{% load humanize %}
+
+<!-- Page Header-->
+<header class="masthead" style="background-image:url()"> {% comment %} ({% 'static' "images/back/back.jpg" %}); "  {% endcomment %}
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>نوس</h1>
+                    <span class="subheading"> بلاگ جدید </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+   <!-- Main Content-->
+ <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% block header %}
+            <h3 class="alert alert-primary text-center">{{category.title}}</h3>
+            {% endblock%}
+
+            <aside>
+               {% popular_articles %}  
+               {% hot_articles %}
+            </aside>
+
+          {% for post in object_list %}
+            <!-- Post preview-->
+            <div class="post-preview">
+                <a href="{% url 'blog:detail' post.slug %}">
+                    <h2 class="post-title">
+                        {{post.title}}
+                    {% if post.is_special %}
+                        <span class="badge badge-danger" style="font-size: 14px;">ویژه</span>
+                    {% endif %}
+                </h2>
+                    <h3 class="post-subtitle">{{post.description|striptags|truncatewords:30}}</h3>
+                </a>
+                <p class="post-meta">
+                    نوشته شده 
+                    <a href="{% url 'blog:author' post.author %}" >  {{post.author.get_full_name}}  </a>
+                    <small>{{post.publish|naturaltime}}</small>
+                   <div> <small>{% ratings post %}</small> </div>
+                   <div> بازدید ها : {{post.hits.count}} </div>
+
+                 {% endfor %}
+
+                <div>
+                    {% for cat in   page_obj.category.active %}
+                    <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
+
+                </div>
+                
+                </div>
+                <hr>
+                
+                {% empty %}
+                <p> متاسفانه موضوعی برای نمایش وجود ندارد. </p>
+                
+
+               {% endfor %}
+            <!-- Pager-->
+
+       <!-- Pager -->
+       {% if is_paginated %}
+       <div class="clearfix pager-botton">
+         {% if page_obj.has_previous %}
+           <a class="btn btn-primary float-right ml-3" href="{% block previous_page_url %}{% endblock %}">پست های جدید &rarr;</a>
+         {% endif %}
+         {% if page_obj.has_next %}
+           <a class="btn btn-primary float-right" href="{% block next_page_url %}{% endblock %}">پست های قدیمی &larr;</a>
+         {% endif %}
+       </div>
+     {% endif %}
+   </div>
+ </div>
+</div>
+{% endblock %}
+
+ 

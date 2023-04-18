@@ -1,0 +1,14 @@
+{% extends 'blog/list.html' %}
+
+{% block header %}
+<h5 class="alert alert-primary "> جستجو : {{search}} </h5>
+{% endblock%}
+
+{% block previous_page_url %}
+{% url 'blog:search1'  page_obj.previous_page_number %}?q={{search}}
+{% endblock %}
+
+
+{% block next_page_url %}
+{% url 'blog:search1' page_obj.next_page_number %}?q={{search}}
+{% endblock %}

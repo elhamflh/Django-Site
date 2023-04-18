@@ -1,0 +1,24 @@
+@import url("https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css");
+
+body{
+    text-align: right  !important;
+    direction: rtl !important;
+    font-family: sahel  !important;
+}
+
+
+.myfont {
+    font-family: sahel !important;    
+}
+
+
+.element.style {
+    background-color: #ffbebe;
+    color: #a50000;
+    padding: 20px 30px;
+}
+
+.btn-show-pass {
+    right:initial;
+    left:0;
+}
